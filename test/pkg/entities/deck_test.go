@@ -97,7 +97,6 @@ func Test_TakeMultipleCards(test *testing.T) {
 		if assert.NoError(subTest, err) {
 			assert.Equal(subTest, amountOfCardsToTake, len(cards))
 		}
-
 	})
 
 	test.Run("Should remove cards taken from the deck", func(subTest *testing.T) {
@@ -107,7 +106,6 @@ func Test_TakeMultipleCards(test *testing.T) {
 				assert.NotContains(subTest, deck.GetCards(), card)
 			}
 		}
-
 	})
 
 	test.Run("Should return an error if less cards in deck than requested amount", func(subTest *testing.T) {
