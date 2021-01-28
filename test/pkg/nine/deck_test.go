@@ -1,29 +1,19 @@
-package entities
+package nine
 
 import (
-	"github.com/card-game/pkg/entities"
+	"github.com/card-game/pkg/nine"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func Test_NewDeck(test *testing.T) {
-	expectedCards := []entities.Card{{Value: 2, Suit: entities.Clubs}, {Value: 5, Suit: entities.Spades}, {Value: 17, Suit: entities.Diamonds}}
-	actualCards := entities.NewCustomDeck(expectedCards).GetCards()
-
-	test.Run("Should create deck with passed cards", func(subTest *testing.T) {
-		assert.Equal(test, expectedCards, actualCards)
-	})
-}
-
 func Test_Shuffle(test *testing.T) {
-	deck := entities.NewRegularDeckWithoutJokers()
+	deck := nine.NewDeck()
 	cards := deck.GetCards()
 	deck.Shuffle()
 
 	test.Run("Should change cards order", func(subTest *testing.T) {
 		assert.NotEqual(subTest, cards, deck.GetCards())
 	})
-
 	test.Run("Should not change card amount", func(subTest *testing.T) {
 		assert.Equal(subTest, len(cards), len(deck.GetCards()))
 	})
@@ -36,12 +26,7 @@ func Test_Shuffle(test *testing.T) {
 }
 
 func Test_GetCards(test *testing.T) {
-	expectedCards := []entities.Card{{Value: 10, Suit: entities.Hearts}, {Value: 8, Suit: entities.Diamonds}}
-	deck := entities.NewCustomDeck(expectedCards)
-
-	test.Run("Should return the cards from the deck", func(subTest *testing.T) {
-		assert.Equal(subTest, expectedCards, deck.GetCards())
-	})
+	deck := nine.NewDeck()
 
 	test.Run("Should return an independent copy of the cards", func(subTest *testing.T) {
 		cards := deck.GetCards()
@@ -50,13 +35,14 @@ func Test_GetCards(test *testing.T) {
 	})
 
 	test.Run("Should return empty array when no cards", func(subTest *testing.T) {
-		emptyDeck := entities.NewCustomDeck([]entities.Card{})
+		emptyDeck := nine.NewDeck()
+		_, _ = emptyDeck.TakeMultipleCards(nine.MaxAmountOfCardsInDeck)
 		assert.Empty(subTest, emptyDeck.GetCards())
 	})
 }
 
 func Test_TakeACard(test *testing.T) {
-	deck := entities.NewRegularDeckWithoutJokers()
+	deck := nine.NewDeck()
 	expectedCards := deck.GetCards()
 
 	test.Run("Should return the first card of the deck", func(subTest *testing.T) {
@@ -74,7 +60,8 @@ func Test_TakeACard(test *testing.T) {
 	})
 
 	test.Run("Should be able to take the last card", func(subTest *testing.T) {
-		singleCardDeck := entities.NewCustomDeck([]entities.Card{{Value: 24, Suit: entities.Diamonds}})
+		singleCardDeck := nine.NewDeck()
+		_, _ = singleCardDeck.TakeMultipleCards(nine.MaxAmountOfCardsInDeck - 1)
 		_, err := singleCardDeck.TakeACard()
 		if assert.NoError(subTest, err) {
 			assert.Empty(subTest, singleCardDeck.GetCards())
@@ -82,14 +69,15 @@ func Test_TakeACard(test *testing.T) {
 	})
 
 	test.Run("Should return an error when the deck is empty", func(subTest *testing.T) {
-		emptyDeck := entities.NewCustomDeck([]entities.Card{})
+		emptyDeck := nine.NewDeck()
+		_, _ = emptyDeck.TakeMultipleCards(nine.MaxAmountOfCardsInDeck)
 		_, err := emptyDeck.TakeACard()
 		assert.Error(subTest, err)
 	})
 }
 
 func Test_TakeMultipleCards(test *testing.T) {
-	deck := entities.NewRegularDeckWithoutJokers()
+	deck := nine.NewDeck()
 
 	test.Run("Should return the amount of cards taken", func(subTest *testing.T) {
 		const amountOfCardsToTake = 17

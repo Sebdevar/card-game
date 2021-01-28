@@ -1,4 +1,4 @@
-package entities
+package nine
 
 type Suit string
 

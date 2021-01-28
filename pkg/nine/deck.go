@@ -1,4 +1,4 @@
-package entities
+package nine
 
 import (
 	"errors"
@@ -7,27 +7,19 @@ import (
 )
 
 const (
-	amountOfCardsInRegularDeckWithoutJokers = 52
-	amountOfCardsPerSuitInRegularDeck       = 13
+	MaxAmountOfCardsInDeck = 52
+	AmountOfCardsPerSuit   = 13
 )
 
 type Deck struct {
 	cards []Card
 }
 
-func NewCustomDeck(cards []Card) *Deck {
-	cardsCopy := make([]Card, len(cards))
-	copy(cardsCopy, cards)
-	return &Deck{
-		cards: cardsCopy,
-	}
-}
-
-func NewRegularDeckWithoutJokers() *Deck {
-	cards := make([]Card, amountOfCardsInRegularDeckWithoutJokers)
+func NewDeck() *Deck {
+	cards := make([]Card, MaxAmountOfCardsInDeck)
 	for i, suit := range GetSuitIterable() {
-		for j := 0; j < amountOfCardsPerSuitInRegularDeck; j++ {
-			cards[amountOfCardsPerSuitInRegularDeck*i+j] = Card{Value: j + 1, Suit: suit}
+		for j := 0; j < AmountOfCardsPerSuit; j++ {
+			cards[AmountOfCardsPerSuit*i+j] = Card{Value: j + 1, Suit: suit}
 		}
 	}
 	return &Deck{
