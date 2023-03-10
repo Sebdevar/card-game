@@ -34,7 +34,7 @@ func (deck *Deck) GetCards() []Card {
 }
 
 func (deck *Deck) Shuffle() {
-	rand.Seed(time.Now().UnixNano())
+	rand.New(rand.NewSource(time.Now().UnixNano()))
 	rand.Shuffle(len(deck.cards), func(i, j int) {
 		deck.cards[i], deck.cards[j] = deck.cards[j], deck.cards[i]
 	})
